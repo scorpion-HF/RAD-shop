@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% load jalali_tags %}
+{% block content %}
+<div class="container-fluid text-center rtl-div mt-3">
+    <h3 class="text-wb">سفارش شماره {{order.pk|persian_numbers}}</h3>
+</div>
+<div class="container-fluid m-0 mt-5 text-center">
+
+    <div class="row mt-4 ms-0 me-0 ps-3 pe-3 bg-wb cart-item-card rounded">
+        {% for item in order_items %}
+        <div class="col-md-4 col-lg-3 col-xl-3 text-center">
+            {% if item.image %}
+            <img src="{{ item.product.image.url }}" class="img-responsive img-fluid rounded-circle pt-1"
+                 alt="product image"
+                 style="max-height: 180px;">
+            {% else %}
+            <img class="img-responsive img-fluid rounded-circle pt-1" alt="product image"
+                 style="max-height: 180px;" src="{% static 'product-placeholder.png' %}">
+            {% endif %}
+        </div>
+        <div class="col-md-8 col-lg-9 col-xl-9">
+            <div class="p-3">
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-6 text-center m-0 p-0">
+                            <p class="text-muted text-uppercase text-right pb-5">
+                                {{item.product_title}}
+                            </p>
+                            <p class="text-muted text-uppercase text-right pb-2">قیمت واحد:
+                                {{item.product_price|price}} ریال
+                            </p>
+                        </div>
+                        <div class="col-xs-12 col-md-6 text-center m-0 p-0">
+                            <p class="mb-0 pb-5"><span><strong
+                                    class="text-blue">{{item.product_quantity|persian_numbers}} عدد
+                            </strong></span>
+                            </p>
+                            <p class="mb-0 pb-2"><span><strong
+                                    class="text-blue">{{item.get_total|price}} ریال</strong></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-2 mb-2 text-blue">
+        {% endfor %}
+    </div>
+</div>
+<div class="row mt-3 mb-5 p-1 ms-3 me-3 bg-wb cart-item-card rounded">
+    <div class="col text-center">
+        <strong class="text-blue">جمع کل:</strong>
+    </div>
+    <div class="col text-center">
+        <strong class="text-blue">{{order.get_total|price}} ریال</strong>
+    </div>
+</div>
+<div class="row mt-3 mb-5 p-1 ms-3 me-3 bg-wb cart-item-card rounded">
+    <div class="col-xs-12 col-md-6 col-lg-4 text-center">
+        <p class="text-muted text-uppercase text-right pb-5">
+            آدرس:
+            {{order.address}}
+        </p>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-4 text-center">
+        <p class="text-muted text-uppercase text-right pb-5">
+            {% if order.is_posted %}
+            کد رهگیری پستی: {{ order.post_code|persian_numbers }}
+            {% else %}
+            وضعیت ارسال:
+            سفارش ارسال نشده است
+            {% endif %}
+        </p>
+    </div>
+    {% if order.phone_number %}
+        <div class="col-xs-12 col-md-6 col-lg-4 text-center">
+            <p class="text-muted text-uppercase text-right pb-5">
+                شماره تلفن همراه:
+                {{order.phone_number}}
+            </p>
+        </div>
+    {% endif %}
+    <div class="col-xs-12 col-md-6 col-lg-4 text-center">
+        <p class="text-muted text-uppercase text-right pb-5">
+            تاریخ:
+            {% with date=order.date|to_jalali:'%H:%M _ %y/%m/%d' %}
+            {{date|persian_numbers}}
+            {% endwith %}
+        </p>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-4 text-center">
+        <p class="text-muted text-uppercase text-right pb-5">
+            {% if order.is_paid %}
+            پرداخت انجام شده است
+            {% else %}
+            <a href="#" class="btn btn-primary">پرداخت</a>
+            {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock %}

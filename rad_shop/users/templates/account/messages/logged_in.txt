@@ -1,0 +1,4 @@
+{% load account %}
+{% user_display user as name %}
+با موفقیت با این آدرس ایمیل وارد حساب کاربری خود شدید.
+ {{name}}

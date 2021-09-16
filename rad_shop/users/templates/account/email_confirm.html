@@ -1,0 +1,30 @@
+{% extends "account/base.html" %}
+
+{% load account %}
+
+{% block content %}
+<div class="container bg-wb p-3 mt-5 text-center rounded">
+    <h3 class="text-blue">تایید آدرس ایمیل</h3>
+
+    {% if confirmation %}
+
+    <p class="text-blue">تایید بفرمایید که آدرس ایمیل با نشانی <a class="text-blue" href="mailto:{{ email }}">
+        {{ confirmation.email_address }}</a>
+        مربوط به شما و برای حساب کاربری شما در وبسایت فروشگاه های زنجیره ای رزم آوران دریا است.</p>
+
+    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <button class="btn bg-blue text-wb hover-green" type="submit">تایید</button>
+    </form>
+
+    {% else %}
+
+    {% url 'account_email' as email_url %}
+
+    <p class="text-blue"> لینک تایید آدرس ایمیل منقضی شده است لطفا از طریق این لینک اقدام به درخواست یک لینک تایید آدرس
+        ایمیل بفرمایید. </p>
+    <p class="text-blue"><a href="{{ email_url }}">issue a new e-mail confirmation request</a></p>
+
+    {% endif %}
+</div>
+{% endblock %}

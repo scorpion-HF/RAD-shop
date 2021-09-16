@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% block extra_meta %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<div class="container-fluid text-center rtl-div mt-3">
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div class="input-group pt-2 pe-3 ps-2 text-center">
+                <label class="rounded bg-wb text-black w-50">شعبه {{view.kwargs.branch}}</label>
+                <a href="{% url 'branches:select-branch' 'cart' %}" class="btn rounded bg-black text-wb hover-green w-50">انتخاب شعبه</a>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8">
+            <h3 class="text-wb">سبد خرید شما در شعبه {{view.kwargs.branch}}</h3>
+        </div>
+    </div>
+</div>
+<div class="container-fluid m-0 mt-5 text-center">
+    <form id="formset" method="post" action="{% url 'orders:user-cart' 'none' %}" name="Add2Cart">
+        {% csrf_token %}
+        {{ form.management_form }}
+        {% for form_item, item in formset__cart_items %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        <div class="row mt-4 ms-0 me-0 ps-3 pe-3 bg-wb cart-item-card rounded">
+            <div class="col-md-4 col-lg-3 col-xl-3 text-center">
+                {% if item.image %}
+                <img src="{{ item.product.image.url }}" class="img-responsive img-fluid rounded-circle pt-1"
+                     alt="product image"
+                     style="max-height: 180px;">
+                {% else %}
+                <img class="img-responsive img-fluid rounded-circle pt-1" alt="product image"
+                     style="max-height: 180px;" src="{% static 'catalog/product-placeholder.png' %}">
+                {% endif %}
+            </div>
+            <div class="col-md-8 col-lg-9 col-xl-9">
+                <div class="p-3">
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6 text-center m-0 p-0">
+                                <a href="{% url 'catalog:product' pk=item.product.pk branch='none' %}" style="text-decoration: none">
+                                    <h5
+                                        class="text-center text-blue p-3">
+                                    {{item.product.title}}
+                                    </h5>
+                                </a>
+                                <p class="text-muted text-uppercase small text-right pb-2">قیمت واحد:
+                                    {{item.product.price|price}} ریال</p>
+                                <p class="mb-2 text-muted text-uppercase small text-right">
+                                    {{item.quantity|persian_numbers}} عدد</p>
+                            </div>
+                            <div class="col-xs-12 col-md-6 text-center m-0 p-0">
+                                <p class="mb-2 text-muted text-uppercase small text-right p-3">
+                                    <label for="{{ form_item.quantity.id_for_label }}" class="form-label text-black">
+                                        تغییر تعداد:
+                                    </label>
+                                    {{form_item.quantity}}
+                                </p>
+                                <p class="mb-0 pb-2"><span><strong
+                                        class="text-blue">{{item.get_total|price}} ریال</strong></span></p>
+                                <p>
+                                    <a class="btn btn-danger" style="text-decoration: none;"
+                                      href="{% url 'orders:remove-item' item.pk %}">
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-2 mb-2 text-blue">
+            {% endfor %}
+            {% if cart_items.all %}
+            <div class="col-xs-1 d-flex justify-content-end">
+                <button type="submit" class="btn btn-warning m-2">اعمال تغییرات</button>
+            </div>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% if cart_items.all %}
+<hr class="mt-2 mb-2 text-blue">
+<div class="row mt-1 mb-5 p-1 ms-3 me-3 bg-wb cart-item-card rounded">
+    <div class="col text-center">
+        <strong class="text-blue">جمع کل:</strong>
+    </div>
+    <div class="col text-center">
+        <strong class="text-blue">{{cart_total|price}} ریال</strong>
+    </div>
+    <div class="col text-center">
+        <a href="{% url 'orders:create-order' view.kwargs.branch %}" class="btn bg-blue hover-green text-wb">ثبت سفارش</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

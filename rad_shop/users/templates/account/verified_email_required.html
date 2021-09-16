@@ -1,0 +1,20 @@
+{% extends "account/base.html" %}
+
+
+{% block content %}
+<div class="container col-md-8 bg-wb text-blue mt-5 p-3 text-center rounded">
+
+
+    <h3 class="text-blue">ایمیل خود را تایید کنید</h3>
+
+    {% url 'account_email' as email_url %}
+
+    <p class="text-blue">استفاده از این بخش از سایت نیاز به این دارد که شما ایمیل خود را تایید کرده باشید</p>
+
+    <p class="text-blue"> ایمیل تایید حساب کاربری برای شما ارسال شده است لطفا جهت تمام کردن مراحل ثبت نام با استفاده از لینک موجود در آن اقدام به فعال سازی حساب کاربری خود نمایید و در صورتی که پس از چند دقیقه ایمیلی دریافت نکردید با ما تماس حاصل فرمایید</p>
+
+
+    <p class="text-blue"><strong class="text-warning">توجه:</strong> شما همچنان می توانید آدرس ایمیل خود را تغییر دهید <a href="{{ email_url }}">تغییر آدرس ایمیل</a></p>
+</div>
+
+{% endblock %}

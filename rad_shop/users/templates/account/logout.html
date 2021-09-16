@@ -1,0 +1,19 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<div class="container col-md-8 bg-wb text-blue mt-5 p-3 text-center rounded">
+
+    <h1 class="text-blue">خروج از حساب کاربری</h1>
+
+    <p class="text-blue">آیا می خواهید از حساب کاربری خود خارج شوید؟</p>
+
+    <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn bg-blue text-wb hover-green" type="submit">خروج</button>
+    </form>
+</div>
+
+{% endblock %}

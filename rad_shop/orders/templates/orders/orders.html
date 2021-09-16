@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% load jalali_tags %}
+{% block extra_meta %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+      integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<div class="container-fluid text-center rtl-div mt-3">
+    <h3 class="text-wb">سفارشات شما</h3>
+</div>
+<div class="container-fluid m-0 mt-5 text-center">
+    <div class="row mt-4 ms-0 me-0 ps-3 pe-3 bg-wb cart-item-card rounded">
+        {% for order in orders %}
+        <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-8 align-items-between justify-content-center m-0 p-0 mt-3">
+                            <p class="text-muted text-uppercase small text-right"><a class="text-blue" style="text-decoration: none;" href="{% url 'orders:order-detail' order.pk %}">سفارش شماره {{order.pk|persian_numbers}}</a></p>
+                            <p class="mb-1 text-danger text-uppercase small text-right">{{order.branch}}</p>
+                            <p class="mb-1 text-muted text-uppercase small text-right"> تاریخ سفارش:
+                                {% with date=order.date|to_jalali:'%H:%M _ %y/%m/%d' %}
+                                {{date|persian_numbers}}
+                                {% endwith %}
+                            </p>
+                            <p class="mb-2 text-muted text-uppercase small text-right">کد پستی:
+                                {{order.postal_code|persian_numbers}}</p>
+                            <p class="mb-1 text-muted text-uppercase small text-right">آدرس:
+                                {{order.address|persian_numbers}}</p>
+                        </div>
+                        <div class="col-xs-12 col-md-4 m-0 p-0 mt-3">
+
+                            <p class="mb-0 pb-2"><span><strong
+                                    class="text-blue">{{order.get_total|price}} ریال</strong></span></p>
+                            <p class="mb-0 pb-2"><span><strong class="text-blue">
+                                {% if order.is_posted %}
+                                کد رهگیری پستی: {{ order.post_code|persian_numbers }}
+                                {% else %}
+                                سفارش ارسال نشده است
+                                {% endif %}
+                            </strong></span></p>
+                            <p class="mb-0 pb-2"><span><strong class="text-blue">
+                                {% if order.is_paid %}
+                                پرداخت انجام شده است
+                                {% else %}
+                                <a href="#" class="btn btn-primary">پرداخت</a>
+                                {% endif %}
+                            </strong></span>
+                                {% if not order.is_posted and not order.is_paid %}
+                                    <a class="btn btn-danger" style="text-decoration: none;"
+                                    href="{% url 'orders:remove-order' order.pk %}">
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                    </a>
+                                {% endif %}
+                            </p>
+
+                        </div>
+                        <hr class="text-blue m-0 p-0 mb-1">
+                    </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% block content %}
+    <div class="row m-0">
+        <div class="container-fluid col-xs-12 col-lg-3 p-0 m-0 pt-3">
+            <div class="input-group pt-2 pe-3 ps-2 text-center">
+                <label class="rounded bg-wb text-black w-50">شعبه {{view.kwargs.branch}}</label>
+                <a href="{% url 'branches:select-branch' 'products' %}" class="btn rounded bg-black text-wb hover-green w-50">انتخاب شعبه</a>
+            </div>
+            <form method="get" class="m-0 p-0">
+                <div class="input-group pt-2 pe-3 ps-2">
+                    <input type="search" class="form-control rounded bg-wb text-black" placeholder="کالای مورد نظر"
+                           aria-label="Search"
+                           aria-describedby="search-addon"
+                           name="term">
+                    <button type="submit" class="btn rounded bg-black text-wb hover-green">جستجو</button>
+                </div>
+            </form>
+            <div class="container-fluid p-0 m-0">
+                <ul class="list-group pt-3 pe-3 ps-2 w-100">
+                    <form method="post">
+                        {% csrf_token %}
+                        <li class="list-group-item bg-black text-wb">دسته بندی ها</li>
+                        {% for field in form.visible_fields %}
+                            <li class="list-group-item bg-wb text-blue" aria-current="true">
+                                {{ field }}
+                                {{ field.label }}
+                            </li>
+                        {% endfor %}
+
+                        <li class="list-group-item bg-wb text-blue text-center" aria-current="true">
+                            <button type="submit" class="btn rounded bg-black text-wb hover-green">اعمال فیلتر</button>
+                        </li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+        <div class="container-fluid col-xs-12 col-lg-9 m-0 p-0 pt-3">
+            <div class="row ms-2 me-2">
+                {% for product in products %}
+                <div class="col-xs-12 col-sm-6 col-lg-4 col-xxl-3 p-0">
+                    <div class="product-grid4">
+                        <div class="product-image4">
+                            <a href="{% url 'catalog:product' pk=product.id branch=view.kwargs.branch %}">
+                                {% if product.image %}
+                                    <img class="pic-1" src="{{product.image.url}}">
+                                {% else %}
+                                    <img class="pic-1" src="{% static 'catalog/product-placeholder.png' %}">
+                                {% endif %}
+                            </a>
+                            <span class="product-new-label">جدید</span>
+                            <span class="product-discount-label">{{'10%-'|persian_numbers}}</span>
+                        </div>
+                        <div class="product-content">
+                            <h3 class="title"><a href="{% url 'catalog:product' pk=product.id branch=view.kwargs.branch %}">{{ product.title }}</a></h3>
+                            <div class="price">
+                                {{product.price|price}} ریال
+                                <!--<span>160000 ریال</span>-->
+                            </div>
+                            <a class="add-to-cart" href="{% url 'catalog:product' pk=product.id branch=view.kwargs.branch %}">اضافه به سبد خرید</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

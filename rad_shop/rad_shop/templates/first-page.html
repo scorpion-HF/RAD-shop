@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% block content %}
+    <div class="row m-0">
+        <img class="img-fluid w-100 mb-3 mt-3 p-0" src='{% static "bandar-branch-header.jpg" %}'
+             alt="banner">
+        <span class="border-bottom border-5 mb-2"></span>
+    </div>
+    <div class="row m-0 mb-4 text-center">
+        <div class="col-xs-12 text-center col-md-6 p-0 position-relative">
+            <img class="img-responsive mt-4" src='{% static "products-banner.jpg" %}' style="height: 25wh; width: 95%;"
+                 alt="products-banner">
+            <a id="product-img-btn" class="btn btn-dark" href="{% url 'catalog:products' 'none' %}" role="button">
+                مشاهده محصولات
+            </a>
+        </div>
+        <div class="col-xs-12 col-md-6 p-0 position-relative">
+            <img class="img-responsive mt-4" src='{% static "login-banner.jpg" %}' style="height: 25wh; width: 95%;"
+                 alt="products-banner">
+            <a id="login-img-btn" class="btn btn-dark" href="{% url 'account_login' %}" role="button">
+                ورود به حساب کاربری
+            </a>
+            <a id="signup-img-btn" class="btn btn-dark" href="{% url 'account_signup' %}" role="button">
+                ساخت حساب کاربری
+            </a>
+        </div>
+    </div>
+    <div class="row m-0 justify-content-center mb-3">
+        <span class="border-top border-5 pt-5"></span>
+        <div class="col-xs-12 col-md-6 text-center">
+            <img src='{% static "navy-logo.png" %}' class="img-fluid" style="max-width: 45%;" alt="navy-logo">
+            <img src='{% static "rad-logo.png" %}' class="img-fluid rounded-circle" style="max-width: 45%;" alt="rad-logo">
+        </div>
+        <div class="col-xs-12 col-md-6 text-center">
+            <h4>نیروی دریایی راهبردی ارتش جمهوری اسلامی ایران</h4>
+            <h5>فرماندهی آماد و پشتیبانی</h5>
+            <h6>مجموعه فروشگاه های زنجیره ای رزم آوران دریا</h6>
+            <p>شماره تماس روابط عمومی:</p>
+            <p>{{'021-33274481'|persian_numbers}}</p>
+            <p>{{'021-33274482'|persian_numbers}}</p>
+            <p>{{'021-33274483'|persian_numbers}}</p>
+        </div>
+        <span class="border-bottom border-5"></span>
+    </div>
+{% endblock %}

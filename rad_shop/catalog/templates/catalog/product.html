@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load IR %}
+{% block content %}
+    <div class="row justify-content-center align-items-center m-4 mt-5 mb-5 pb-5 pt-5 rounded bg-wb">
+        <div class="container-sm col-xs-12 col-md-6 col-lg-4">
+            <div class="row">
+                <div class="container-fluid col-xs-12 text-center">
+                    {% if product.image %}
+                        <img class="pic-1" src="{{product.image.url}}">
+                    {% else %}
+                        <img class="pic-1" src="{% static 'catalog/product-placeholder.png' %}">
+                    {% endif %}
+                </div>
+                <div class="container-fluid col-xs-12 text-center mt-4">
+                    <h3 class="text-dark">{{product.title}}</h3>
+                    <div class="price">
+                        <!--<span class="text-black" style="text-decoration: line-through;">160000 ریال</span>-->
+                        <p class="text-blue">{{product.price|price}} ریال</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-sm col-xs-12 col-md-6 col-lg-8">
+            <div class="row">
+                <div class="container-fluid col-xs-12">
+                    <p class="text-black pe-3 ps-2 w-100">{{product.description}}</p>
+                    <ul class="list-group pt-3 pe-3 ps-2 w-100">
+                        <li class="list-group-item bg-black text-wb">مشخصات</li>
+                        {% for spec in product.specification_set.all %}
+                        <li class="list-group-item bg-wb" aria-current="true">
+                            <div class="row pe-3">
+                                <div class="container-fluid col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 list-item m-0 p-0 text-blue">
+                                    {{spec.title|persian_numbers}}
+                                </div>
+                                <div class="container-fluid col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 list-item m-0 p-0 text-blue">
+                                    {{spec.value|persian_numbers}}
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr class="text-blue">
+        <div class="container col-xs-12 text-center mt-3 mb-3">
+            <h5 class="text-blue mb-4">
+                اضافه کردن به سبد خرید
+            </h5>
+            <form method="post" class="inline" action="{% url 'catalog:product' pk=product.id branch=view.kwargs.branch %}">
+                {% csrf_token %}
+                <label for="{{ form.quantity.id_for_label }}" class="form-label text-black">تعداد</label>
+                {{ form.quantity }}
+                <button type="submit" id="detail-add-to-cart" class="btn rounded text-wb bg-blue">
+                    اضافه به سبد خرید
+                </button>
+            </form>
+            <a class="btn btn-warning text-black hover-green" type="submit"
+               href="{% url 'catalog:products' view.kwargs.branch %}">
+               بازگشت به محصولات
+            </a>
+        </div>
+    </div>
+{% endblock %}

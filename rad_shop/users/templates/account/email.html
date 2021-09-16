@@ -1,0 +1,91 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<div class="container col-md-8 bg-wb text-blue mt-5 p-3 text-center rounded">
+    <h3 class="text-blue">آدرس های ایمیل کاربر</h3>
+    {% if user.emailaddress_set.all %}
+    <p class="text-blue">این آدرس های ایمیل برای حساب کاربری فعلی شما ثبت شده اند:</p>
+
+    <form action="{% url 'account_email' %}" class="email_list" method="post">
+        {% csrf_token %}
+        <fieldset class="blockLabels">
+
+            {% for emailaddress in user.emailaddress_set.all %}
+            <div class="ctrlHolder">
+                <label for="email_radio_{{forloop.counter}}"
+                       class="{% if emailaddress.primary %}primary_email{%endif%} text-blue">
+
+                          <input id="email_radio_{{forloop.counter}}" type="radio"
+                                 name="email" {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{%endif %}
+                                 value="{{emailaddress.email}}"/>
+
+
+                    {{ emailaddress.email }}
+                    {% if emailaddress.verified %}
+                    <span class="verified text-success">تایید شده</span>
+                    {% else %}
+                    <span class="unverified text-danger">عدم تایید</span>
+                    {% endif %}
+                    {% if emailaddress.primary %}<span class="primary text-warning"> اصلی </span>{% endif %}
+                </label>
+            </div>
+            {% endfor %}
+
+            <div class="buttonHolder mt-3">
+                <button class="btn bg-blue text-wb hover-green" type="submit" name="action_primary">تعیین به عنوان آدرس اصلی
+                </button>
+                <button class="btn bg-blue text-wb hover-green" type="submit" name="action_send">ارسال دوباره ایمیل تایید</button>
+                <button class="btn btn-danger" type="submit" name="action_remove">حذف</button>
+            </div>
+
+        </fieldset>
+    </form>
+
+    {% else %}
+    <p><strong class="text-warning">هشدار</strong>در حال حاضر شما هیچ آدرس ایمیلی ندارید و این باعث می شود بعدا در
+        مواردی مانند بازیابی کلمه عبور و یا دریافت اعلانات دچار مشکل شوید پیشنهاد می شود اقدام به اضافه کردن حداقل یک
+        آدرس ایمیل بنمایید.</p>
+
+    {% endif %}
+
+    {% if can_add_email %}
+    <hr class="bg-blue mt-5 mb-5">
+    <h5 class="text-blue">اضافه کردن آدرس ایمیل</h5>
+
+    <form method="post" action="{% url 'account_email' %}" class="add_email">
+        {% csrf_token %}
+        <div class="field-error">
+            {{ form.non_field_errors }}
+        </div>
+        <div class="mb-3 text-center">
+            <label for="{{ form.email.id_for_label }}" class="form-label text-black">آدرس ایمیل</label>
+            {{ form.email }}
+            <div class="field-error">
+                {{ form.email.errors }}
+            </div>
+        </div>
+        <button class="btn bg-blue text-wb hover-green" name="action_add" type="submit">اضافه کردن</button>
+    </form>
+    <a class="btn btn-warning text-black hover-green" type="submit" href="{% url 'users:profile' %}">بازگشت به پروفایل</a>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script type="text/javascript">
+(function() {
+  var message = " آیا مطمئن هستید که می خواهید این آدرس ایمیل را حذف کنید؟ ";
+  var actions = document.getElementsByName('action_remove');
+  if (actions.length) {
+    actions[0].addEventListener("click", function(e) {
+      if (! confirm(message)) {
+        e.preventDefault();
+      }
+    });
+  }
+})();
+
+</script>
+{% endblock %}
