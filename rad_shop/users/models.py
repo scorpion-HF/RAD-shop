@@ -35,10 +35,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-ROLE_CHOICES = [(str(j), "ادمین {}".format(i.name)) for i, j in zip(Branch.objects.all(), range(2, len(Branch.objects.all()) + 2))]
-ROLE_CHOICES += [('0', 'مدیر کشور'), ('1', 'مشتری')]
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True, verbose_name='پست الکترونیک')
     first_name = models.CharField(max_length=50, null=True, blank=True, verbose_name='نام')
@@ -46,12 +42,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=11, blank=True, null=True, verbose_name='شماره تلفن همراه')
     address = models.TextField(null=True, blank=True, verbose_name='آدرس')
     postal_code = models.CharField(max_length=10, null=True, blank=True, verbose_name='کد پستی')
-    is_staff = models.BooleanField(default=False, verbose_name='کاربر ادمین شعبه')
-    is_superuser = models.BooleanField(default=False, verbose_name='کاربر مدیر کشور')
+    is_staff = models.BooleanField(default=False, verbose_name='کاربر ادمین')
+    is_superuser = models.BooleanField(default=False, verbose_name='کاربر مدیر')
     is_active = models.BooleanField(default=True, verbose_name='فعال')
     last_login = models.DateTimeField(null=True, blank=True, verbose_name='تاریخ آخرین ورود')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ عضویت')
-    role = models.CharField(max_length=1, default='1', null=False, blank=False, choices=ROLE_CHOICES, verbose_name='نقش')
 
     class Meta:
         verbose_name = 'کاربر'
