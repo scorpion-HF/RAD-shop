@@ -3,6 +3,7 @@ from allauth.account.forms import LoginForm, PasswordField, SignupForm, AddEmail
 from captcha.fields import CaptchaField
 from django import forms
 from .models import User
+from branches.models import Branch
 
 
 class CustomLoginForm(LoginForm):

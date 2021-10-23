@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, FormView
+from django.views.generic import UpdateView
 from .models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy

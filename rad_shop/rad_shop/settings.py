@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'jalali_date',
+    'branches',
     'users',
     'allauth',
     'allauth.account',
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     'captcha',
     'catalog',
     'orders',
-    'branches',
 ]
 
 MIDDLEWARE = [
@@ -157,8 +157,6 @@ JALALI_DATE_DEFAULTS = {
 
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 AUTH_USER_MODEL = 'users.User'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -203,10 +201,13 @@ STATICFILES_DIRS = [
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'saeedalbooyeh@gmail.com'
-EMAIL_HOST_PASSWORD = 'uuhtjxfubwcdsaxu'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'RAD Shopls'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = '***'
+# EMAIL_HOST_PASSWORD = '***'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = 'RAD Shopls'
